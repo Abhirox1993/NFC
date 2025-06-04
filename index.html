@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Visiting Card</title>
+    <title>NFC Digital Visiting Card</title>
     <style>
         * {
             margin: 0;
@@ -53,6 +53,11 @@
             z-index: 10;
             border: none;
             outline: none;
+            transition: transform 0.3s;
+        }
+        
+        .nfc-button:active {
+            transform: scale(0.95);
         }
         
         .nfc-icon {
@@ -62,142 +67,7 @@
             background-size: contain;
         }
         
-        .profile-section {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .profile-pic {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            margin-right: 20px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #888;
-            font-size: 30px;
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .name-title {
-            flex: 1;
-        }
-        
-        .name {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .title {
-            font-size: 16px;
-            color: #4a6fa5;
-            font-weight: 500;
-        }
-        
-        .company-logo {
-            height: 30px;
-            margin-bottom: 20px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: left center;
-        }
-        
-        .contact-info {
-            margin-top: 20px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            color: #555;
-        }
-        
-        .contact-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        
-        .phone-icon {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>');
-        }
-        
-        .email-icon {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>');
-        }
-        
-        .website-icon {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>');
-        }
-        
-        .address-icon {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>');
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-        }
-        
-        .social-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #f0f0f0;
-            margin: 0 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #4a6fa5;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .qr-code {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .qr-code img {
-            width: 100px;
-            height: 100px;
-            border: 1px solid #eee;
-            padding: 5px;
-            background: white;
-        }
-        
-        @media (max-width: 480px) {
-            .visiting-card {
-                padding: 20px;
-            }
-            
-            .profile-pic {
-                width: 70px;
-                height: 70px;
-                font-size: 24px;
-            }
-            
-            .name {
-                font-size: 20px;
-            }
-            
-            .title {
-                font-size: 14px;
-            }
-        }
+        /* ... (keep all your existing styles from previous example) ... */
     </style>
 </head>
 <body>
@@ -206,65 +76,23 @@
             <div class="nfc-icon"></div>
         </button>
         
-        <div class="visiting-card">
-            <!-- Company Logo (replace with your logo) -->
-            <div class="company-logo" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 50\"><text x=\"0\" y=\"35\" font-family=\"Arial\" font-size=\"36\" fill=\"%234a6fa5\">MyCompany</text></svg>')"></div>
-            
-            <!-- Profile Section -->
-            <div class="profile-section">
-                <div class="profile-pic" id="profilePic">JD</div>
-                <div class="name-title">
-                    <div class="name" id="personName">John Doe</div>
-                    <div class="title" id="personTitle">Senior Developer</div>
-                </div>
-            </div>
-            
-            <!-- Contact Information -->
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon phone-icon"></div>
-                    <div class="contact-text" id="phoneNumber">+1 (555) 123-4567</div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon email-icon"></div>
-                    <div class="contact-text" id="emailAddress">john.doe@example.com</div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon website-icon"></div>
-                    <div class="contact-text" id="websiteUrl">www.example.com/johndoe</div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon address-icon"></div>
-                    <div class="contact-text" id="address">123 Business Ave, Suite 456<br>New York, NY 10001</div>
-                </div>
-            </div>
-            
-            <!-- Social Links -->
-            <div class="social-links">
-                <a href="https://linkedin.com" class="social-icon">in</a>
-                <a href="https://twitter.com" class="social-icon">X</a>
-                <a href="https://facebook.com" class="social-icon">f</a>
-                <a href="https://instagram.com" class="social-icon">ig</a>
-            </div>
-            
-            <!-- QR Code (would be generated dynamically in production) -->
-            <div class="qr-code">
-                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='%23fff'/><path d='M20 20h10v10H20zM40 20h10v10H40zM20 40h10v10H20zM40 40h10v10H40zM60 20h10v10H60z' fill='%23000'/></svg>" alt="QR Code">
-            </div>
-        </div>
+        <!-- ... (keep your existing visiting card HTML structure) ... -->
     </div>
     
     <script>
-        // Contact data that will be shared via NFC
-        const contactData = {
-            name: "John Doe",
-            title: "Senior Developer",
-            company: "MyCompany",
-            phone: "+15551234567",
-            email: "john.doe@example.com",
-            website: "https://www.example.com/johndoe",
-            address: "123 Business Ave, Suite 456, New York, NY 10001",
-            vcard: `BEGIN:VCARD
+        // Enhanced NFC Sharing Functionality
+        document.getElementById('nfcButton').addEventListener('click', async function() {
+            const nfcButton = document.getElementById('nfcButton');
+            
+            try {
+                // Check if Web NFC API is available (Android Chrome)
+                if ('NDEFReader' in window) {
+                    nfcButton.style.backgroundColor = '#3a5a8a'; // Visual feedback
+                    
+                    const ndef = new NDEFReader();
+                    
+                    // Create vCard data
+                    const vCardData = `BEGIN:VCARD
 VERSION:3.0
 N:Doe;John;;;
 FN:John Doe
@@ -274,70 +102,66 @@ TEL;TYPE=WORK,VOICE:+15551234567
 EMAIL;TYPE=PREF,INTERNET:john.doe@example.com
 URL:https://www.example.com/johndoe
 ADR;TYPE=WORK:;;123 Business Ave, Suite 456;New York;NY;10001;USA
-END:VCARD`
-        };
-        
-        document.getElementById('nfcButton').addEventListener('click', async function() {
-            try {
-                if ('NDEFReader' in window) {
-                    // Web NFC API is available (Android Chrome)
-                    const ndef = new NDEFReader();
+END:VCARD`;
                     
-                    // Write vCard data as an NFC tag
+                    // Show user instructions
+                    alert('Ready to share via NFC!\n\nHold your phone close to another NFC-enabled device.\n\nMake sure NFC is turned on in your settings.');
+                    
+                    // Write the vCard to NFC
                     await ndef.write({
-                        records: [{ 
+                        records: [{
                             recordType: "text/vcard",
-                            data: contactData.vcard
+                            data: vCardData,
+                            mediaType: "text/vcard"
                         }]
                     });
                     
-                    alert('Contact shared via NFC successfully!');
-                } 
-                else if (navigator.share) {
-                    // Fallback to Web Share API if NFC isn't available
-                    await navigator.share({
-                        title: `${contactData.name} - ${contactData.title}`,
-                        text: `Contact: ${contactData.phone}\nEmail: ${contactData.email}`,
-                        url: contactData.website
-                    });
-                }
-                else {
-                    // Final fallback - copy contact info to clipboard
-                    const contactText = `${contactData.name}\n${contactData.title}\n${contactData.company}\nPhone: ${contactData.phone}\nEmail: ${contactData.email}\nWebsite: ${contactData.website}\nAddress: ${contactData.address}`;
-                    await navigator.clipboard.writeText(contactText);
-                    alert('Contact info copied to clipboard!');
+                    // Success feedback
+                    nfcButton.style.backgroundColor = '#2ecc71'; // Green for success
+                    setTimeout(() => {
+                        nfcButton.style.backgroundColor = '#4a6fa5'; // Reset color
+                    }, 2000);
+                    
+                } else {
+                    // NFC not supported - fallback to Web Share API
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: 'John Doe - Senior Developer',
+                            text: 'Contact me at +1 (555) 123-4567 or john.doe@example.com',
+                            url: 'https://www.example.com/johndoe'
+                        });
+                    } else {
+                        // Final fallback - copy to clipboard
+                        await navigator.clipboard.writeText(
+                            `John Doe\nSenior Developer\nMyCompany\nPhone: +1 (555) 123-4567\nEmail: john.doe@example.com\nWebsite: https://www.example.com/johndoe`
+                        );
+                        alert('Contact info copied to clipboard!\n\nYou can now paste it anywhere.');
+                    }
                 }
             } catch (error) {
-                console.error("Error sharing:", error);
+                console.error("Error:", error);
+                nfcButton.style.backgroundColor = '#e74c3c'; // Red for error
                 
-                // Show appropriate error message
+                // User canceled the operation
                 if (error.name === 'NotAllowedError') {
-                    alert('Please allow NFC permissions in your browser settings.');
-                } else {
-                    alert('Sharing failed. ' + error.message);
+                    alert('NFC operation was canceled or permission denied.');
+                } 
+                // NFC timeout
+                else if (error.name === 'TimeoutError') {
+                    alert('NFC operation timed out. Please try again and hold devices closer together.');
                 }
+                // Other errors
+                else {
+                    alert('Error sharing contact: ' + error.message);
+                }
+                
+                setTimeout(() => {
+                    nfcButton.style.backgroundColor = '#4a6fa5'; // Reset color
+                }, 2000);
             }
         });
         
-        // Make all contact items clickable
-        document.getElementById('phoneNumber').addEventListener('click', function() {
-            window.location.href = `tel:${contactData.phone.replace(/[^0-9+]/g, '')}`;
-        });
-        
-        document.getElementById('emailAddress').addEventListener('click', function() {
-            window.location.href = `mailto:${contactData.email}`;
-        });
-        
-        document.getElementById('websiteUrl').addEventListener('click', function() {
-            window.open(contactData.website, '_blank');
-        });
-        
-        // Style clickable elements
-        const clickableElements = document.querySelectorAll('#phoneNumber, #emailAddress, #websiteUrl');
-        clickableElements.forEach(el => {
-            el.style.cursor = 'pointer';
-            el.style.textDecoration = 'underline';
-        });
+        // ... (keep your existing click handlers for contact info) ...
     </script>
 </body>
 </html>
