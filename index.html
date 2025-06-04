@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>vCard Share - John Doe</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
   <h2>John Doe</h2>
@@ -13,13 +13,11 @@
 
   <br/>
 
-  <!-- Download Button -->
   <a id="download" download="JohnDoe.vcf">
     <button>Download vCard</button>
   </a>
 
-  <!-- Share Button -->
-  <button onclick="shareVCF()">Share vCard</button>
+  <button onclick="requestPermission()">Share via Bluetooth / Nearby</button>
 
   <script>
     const vcardText = `BEGIN:VCARD
@@ -34,25 +32,35 @@ END:VCARD`;
     const blob = new Blob([vcardText], { type: 'text/vcard' });
     const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
     const fileUrl = URL.createObjectURL(blob);
-    document.getElementById('download').href = fileUrl;
+    document.getElementById("download").href = fileUrl;
+
+    function requestPermission() {
+      // Ask user for confirmation (simulating permission prompt)
+      const confirmed = confirm(
+        "This app wants to share a contact file using your device’s share feature (Bluetooth, Nearby Share, etc).\n\nContinue?"
+      );
+      if (confirmed) {
+        shareVCF();
+      } else {
+        alert("Permission not granted.");
+      }
+    }
 
     async function shareVCF() {
-      if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
-        alert("❌ File sharing not supported in your browser.\n\nUse Chrome/Edge on Android with HTTPS.");
-        console.error("navigator.canShare not supported or doesn't allow file sharing.");
-        return;
-      }
-
-      try {
-        await navigator.share({
-          title: "John Doe vCard",
-          text: "Contact card",
-          files: [file],
-        });
-        console.log("✅ Shared successfully");
-      } catch (err) {
-        alert("❌ Sharing failed:\n" + err.message);
-        console.error("Sharing error:", err);
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: "John Doe vCard",
+            text: "Contact card for John Doe",
+            files: [file],
+          });
+          alert("✅ vCard shared successfully!");
+        } catch (err) {
+          console.error(err);
+          alert("❌ Failed to share: " + err.message);
+        }
+      } else {
+        alert("❌ Your device/browser does not support file sharing.\n\nUse Chrome on Android with HTTPS.");
       }
     }
   </script>
