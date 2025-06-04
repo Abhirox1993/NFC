@@ -1,261 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal NFC Sharing</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .card {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative;
-        }
-        
-        .nfc-button {
-            width: 80px;
-            height: 80px;
-            background: #ff0000; /* YouTube red */
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            border: none;
-            outline: none;
-            margin: 0 auto 20px;
-            transition: transform 0.3s;
-        }
-        
-        .nfc-button:active {
-            transform: scale(0.95);
-        }
-        
-        .nfc-icon {
-            width: 40px;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6m0-2C9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96C18.67 6.59 15.64 4 12 4z"/></svg>') no-repeat center;
-            background-size: contain;
-        }
-        
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .subtitle {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .status {
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        
-        .success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-        
-        .youtube-link {
-            color: #ff0000;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
-            display: inline-block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>vCard Share</title>
 </head>
 <body>
-    <div class="card">
-        <button class="nfc-button" id="nfcButton">
-            <div class="nfc-icon"></div>
-        </button>
-        
-        <div class="title">Share via NFC</div>
-        <div class="subtitle">Press the button to share content</div>
-        
-        <div id="statusMessage" class="status"></div>
-        
-        <a href="https://youtube.com" class="youtube-link" id="youtubeLink">
-            Watch on YouTube
-        </a>
-    </div>
+  <h1>John Doe</h1>
+  <p><strong>Phone:</strong> +1234567890</p>
+  <p><strong>Email:</strong> john.doe@example.com</p>
+  <p><strong>Website:</strong> <a href="https://example.com" target="_blank">example.com</a></p>
 
-    <script>
-        const nfcButton = document.getElementById('nfcButton');
-        const statusMessage = document.getElementById('statusMessage');
-        const youtubeLink = "https://youtube.com/watch?v=dQw4w9WgXcQ"; // Replace with your link
-        
-        // Detect device type
-        const isAndroid = /android/i.test(navigator.userAgent);
-        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        
-        // Check NFC availability
-        function checkNFC() {
-            if (isAndroid && 'NDEFReader' in window) {
-                return "supported";
-            } else if (isIOS) {
-                return "ios";
-            } else {
-                return "unsupported";
-            }
+  <!-- Download button -->
+  <a href="contact.vcf" download="JohnDoe.vcf">
+    <button>Download vCard</button>
+  </a>
+
+  <!-- Share via Web Share API (if available) -->
+  <button onclick="shareVCF()">Share via Bluetooth / Nearby</button>
+
+  <script>
+    async function shareVCF() {
+      if (navigator.canShare && navigator.canShare({ files: [] })) {
+        const response = await fetch('contact.vcf');
+        const blob = await response.blob();
+        const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
+
+        try {
+          await navigator.share({
+            title: "John Doe vCard",
+            files: [file],
+          });
+        } catch (err) {
+          alert("Sharing failed: " + err);
         }
-        
-        // Show NFC status to user
-        function showStatus(message, type) {
-            statusMessage.textContent = message;
-            statusMessage.className = "status " + type;
-        }
-        
-        // Open device NFC settings
-        function openNFCSettings() {
-            if (isAndroid) {
-                // Android intent to open NFC settings
-                window.location.href = "intent://settings/nfc#Intent;scheme=android-settings;end";
-            } else if (isIOS) {
-                // iOS can't programmatically open NFC settings
-                showStatus("Please enable NFC in Settings > General > NFC", "info");
-            }
-        }
-        
-        // Share via NFC
-        async function shareViaNFC() {
-            const nfcStatus = checkNFC();
-            
-            if (nfcStatus === "supported") {
-                try {
-                    const ndef = new NDEFReader();
-                    
-                    // Show instructions
-                    showStatus("Ready to share! Hold phones back-to-back", "info");
-                    
-                    // Write YouTube link to NFC tag
-                    await ndef.write({
-                        records: [{
-                            recordType: "url",
-                            data: youtubeLink
-                        }]
-                    });
-                    
-                    showStatus("Content shared successfully!", "success");
-                    
-                } catch (error) {
-                    console.error("NFC error:", error);
-                    
-                    if (error.name === 'NotAllowedError') {
-                        showStatus("NFC permission denied. Please allow in settings.", "error");
-                    } else if (error.name === 'NotReadableError') {
-                        showStatus("NFC not available. Please enable NFC.", "error");
-                        openNFCSettings();
-                    } else {
-                        showStatus("Sharing failed: " + error.message, "error");
-                    }
-                }
-                
-            } else if (nfcStatus === "ios") {
-                // iOS fallback - use Web Share API
-                try {
-                    await navigator.share({
-                        title: 'Check this out on YouTube',
-                        url: youtubeLink
-                    });
-                    showStatus("Shared via iOS sharing", "success");
-                } catch (error) {
-                    console.error("Share failed:", error);
-                    showStatus("Couldn't share. Here's the link:", "error");
-                    document.getElementById('youtubeLink').href = youtubeLink;
-                }
-                
-            } else {
-                // Unsupported device fallback
-                try {
-                    await navigator.clipboard.writeText(youtubeLink);
-                    showStatus("Link copied to clipboard!", "success");
-                    document.getElementById('youtubeLink').href = youtubeLink;
-                } catch (error) {
-                    console.error("Clipboard failed:", error);
-                    showStatus("Here's the link to copy:", "error");
-                    document.getElementById('youtubeLink').href = youtubeLink;
-                }
-            }
-        }
-        
-        // Main button click handler
-        nfcButton.addEventListener('click', async function() {
-            // Visual feedback
-            nfcButton.style.transform = "scale(0.95)";
-            setTimeout(() => { nfcButton.style.transform = "scale(1)"; }, 200);
-            
-            // Check NFC status first
-            const nfcStatus = checkNFC();
-            
-            if (nfcStatus === "supported") {
-                // Android with Web NFC support
-                shareViaNFC();
-            } else if (nfcStatus === "ios") {
-                // iOS device
-                if (navigator.share) {
-                    shareViaNFC(); // Will use Web Share API
-                } else {
-                    showStatus("iOS sharing not available", "error");
-                    document.getElementById('youtubeLink').href = youtubeLink;
-                }
-            } else {
-                // Unsupported browser/device
-                showStatus("NFC not supported in this browser", "error");
-                document.getElementById('youtubeLink').href = youtubeLink;
-            }
-        });
-        
-        // Initial check
-        if (checkNFC() === "supported") {
-            showStatus("NFC sharing ready", "info");
-        } else if (checkNFC() === "ios") {
-            showStatus("Press to share via iOS", "info");
-        } else {
-            showStatus("Press to copy link", "info");
-        }
-        
-        // Set the YouTube link
-        document.getElementById('youtubeLink').href = youtubeLink;
-    </script>
+      } else {
+        alert("Your device doesn't support file sharing via this browser.");
+      }
+    }
+  </script>
 </body>
 </html>
