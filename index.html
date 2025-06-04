@@ -1,41 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>vCard Share</title>
+  <meta charset="UTF-8">
+  <title>vCard Share - John Doe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <h1>John Doe</h1>
-  <p><strong>Phone:</strong> +1234567890</p>
-  <p><strong>Email:</strong> john.doe@example.com</p>
-  <p><strong>Website:</strong> <a href="https://example.com" target="_blank">example.com</a></p>
+  <h2>John Doe</h2>
+  <p>Phone: +1234567890</p>
+  <p>Email: john.doe@example.com</p>
+  <p>Website: <a href="https://example.com" target="_blank">example.com</a></p>
 
-  <!-- Download button -->
-  <a href="contact.vcf" download="JohnDoe.vcf">
+  <br/>
+
+  <!-- Download Button -->
+  <a id="download" download="JohnDoe.vcf">
     <button>Download vCard</button>
   </a>
 
-  <!-- Share via Web Share API (if available) -->
-  <button onclick="shareVCF()">Share via Bluetooth / Nearby</button>
+  <!-- Share Button -->
+  <button onclick="shareVCF()">Share vCard</button>
 
   <script>
-    async function shareVCF() {
-      if (navigator.canShare && navigator.canShare({ files: [] })) {
-        const response = await fetch('contact.vcf');
-        const blob = await response.blob();
-        const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
+    const vcardText = `BEGIN:VCARD
+VERSION:3.0
+N:Doe;John;;;
+FN:John Doe
+TEL;TYPE=mobile:+1234567890
+EMAIL:john.doe@example.com
+URL:https://example.com
+END:VCARD`;
 
+    // Create a blob and set href for download
+    const blob = new Blob([vcardText], { type: 'text/vcard' });
+    const fileUrl = URL.createObjectURL(blob);
+    document.getElementById('download').href = fileUrl;
+
+    async function shareVCF() {
+      const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
-            title: "John Doe vCard",
+            title: 'vCard: John Doe',
+            text: 'Contact info for John Doe',
             files: [file],
           });
         } catch (err) {
           alert("Sharing failed: " + err);
         }
       } else {
-        alert("Your device doesn't support file sharing via this browser.");
+        alert("Your browser doesn't support file sharing (try Android + Chrome).");
       }
     }
   </script>
