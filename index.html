@@ -1,47 +1,77 @@
-<div class="atm-card">
-  <div class="nfc-button" onclick="shareViaNFC()">🔘 Tap to Share</div>
-  <div class="card-body">
-    <h1>YOUR NAME</h1>
-    <p class="title">Founder @ Feathers VC</p>
-    <div class="card-details">
-      <p>contact@feathersvc.com</p>
-      <p>+1 (123) 456-7890</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ATM Card UI</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card-container {
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #1B262C, #0F4C75);
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .nfc-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #BBE1FA;
+      color: #0F4C75;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .card-content {
+      margin-top: 50px;
+    }
+
+    .card-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .card-detail {
+      font-size: 1em;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+    <button class="nfc-button" title="Share via NFC">📶</button>
+    <div class="card-content">
+      <div class="card-title">John Doe</div>
+      <div class="card-detail">Digital Business Card</div>
+      <div class="card-detail">john.doe@example.com</div>
     </div>
   </div>
-</div>
 
-<style>
-.atm-card {
-  width: 300px;
-  height: 180px;
-  background: linear-gradient(135deg, #1a1a1a, #000);
-  border-radius: 15px;
-  padding: 20px;
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  position: relative;
-  font-family: 'Arial', sans-serif;
-}
-.nfc-button {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: rgba(255,255,255,0.1);
-  padding: 5px 10px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-.card-body h1 {
-  font-size: 22px;
-  margin-top: 30px;
-  letter-spacing: 1px;
-}
-.title {
-  color: #aaa;
-  font-size: 14px;
-}
-.card-details {
-  margin-top: 20px;
-  font-size: 12px;
-}
-</style>
+</body>
+</html>
