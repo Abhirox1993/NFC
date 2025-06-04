@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital ATM Card with NFC Sharing</title>
+    <title>Digital Visiting Card</title>
     <style>
         * {
             margin: 0;
@@ -24,47 +24,17 @@
         .card-container {
             width: 100%;
             max-width: 400px;
-            perspective: 1000px;
-        }
-        
-        .card {
-            width: 100%;
-            height: 250px;
-            border-radius: 15px;
-            padding: 20px;
             position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
-        .card-front {
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
-            color: white;
-            position: absolute;
+        .visiting-card {
             width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
+            background: white;
             border-radius: 15px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .card-back {
-            background: linear-gradient(135deg, #4ca1af, #2c3e50);
-            color: white;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            padding: 20px;
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
         
         .nfc-button {
@@ -73,7 +43,7 @@
             right: 20px;
             width: 60px;
             height: 60px;
-            background: #ffffff;
+            background: #4a6fa5;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -86,160 +56,226 @@
         }
         
         .nfc-icon {
-            width: 40px;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232c3e50"><path d="M12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6m0-2C9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96C18.67 6.59 15.64 4 12 4z"/></svg>') no-repeat center;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6m0-2C9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96C18.67 6.59 15.64 4 12 4z"/></svg>') no-repeat center;
             background-size: contain;
         }
         
-        .card-chip {
-            width: 50px;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700"><path d="M6 12H18V13H6z"/><path d="M6 12H18V13H6z" transform="rotate(90 12 12)"/><path d="M6 12H18V13H6z" transform="rotate(45 12 12)"/><path d="M6 12H18V13H6z" transform="rotate(-45 12 12)"/><rect x="11" y="11" width="2" height="2"/></svg>') no-repeat center;
-            background-size: contain;
-            margin-bottom: 15px;
-        }
-        
-        .card-number {
-            font-size: 18px;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-align: center;
-            word-spacing: 8px;
-        }
-        
-        .card-details {
+        .profile-section {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            margin-bottom: 25px;
         }
         
-        .card-holder {
-            font-size: 14px;
-            text-transform: uppercase;
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin-right: 20px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 30px;
+            background-size: cover;
+            background-position: center;
         }
         
-        .card-expiry {
-            font-size: 14px;
+        .name-title {
+            flex: 1;
         }
         
-        .card-issuer {
-            font-size: 24px;
+        .name {
+            font-size: 22px;
             font-weight: bold;
-            text-align: right;
-        }
-        
-        .card-magnetic-strip {
-            height: 40px;
-            background: #000;
-            margin: 20px -20px;
-        }
-        
-        .card-cvv {
-            background: #fff;
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-align: right;
-            margin-left: auto;
-            width: fit-content;
-        }
-        
-        .card-cvv-label {
-            font-size: 12px;
+            color: #333;
             margin-bottom: 5px;
         }
         
-        .card-issuer-back {
-            font-size: 24px;
+        .title {
+            font-size: 16px;
+            color: #4a6fa5;
+            font-weight: 500;
+        }
+        
+        .company-logo {
+            height: 30px;
+            margin-bottom: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: left center;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #555;
+        }
+        
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .phone-icon {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>');
+        }
+        
+        .email-icon {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>');
+        }
+        
+        .website-icon {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>');
+        }
+        
+        .address-icon {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234a6fa5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>');
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            margin: 0 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a6fa5;
+            text-decoration: none;
             font-weight: bold;
-            text-align: right;
-            margin-top: 20px;
         }
         
-        .flipped {
-            transform: rotateY(180deg);
+        .qr-code {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
         }
         
-        .flip-button {
-            margin-top: 20px;
-            padding: 10px 15px;
-            background: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            max-width: 400px;
-        }
-        
-        .website-link {
-            margin-top: 20px;
-            text-align: center;
-            color: #2c3e50;
-            font-weight: bold;
-            word-break: break-all;
+        .qr-code img {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #eee;
+            padding: 5px;
+            background: white;
         }
         
         @media (max-width: 480px) {
-            .card {
-                height: 220px;
+            .visiting-card {
+                padding: 20px;
             }
             
-            .card-number {
-                font-size: 16px;
+            .profile-pic {
+                width: 70px;
+                height: 70px;
+                font-size: 24px;
+            }
+            
+            .name {
+                font-size: 20px;
+            }
+            
+            .title {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
     <div class="card-container">
-        <button class="nfc-button" id="nfcButton" aria-label="Share via NFC">
+        <button class="nfc-button" id="nfcButton" aria-label="Share contact via NFC">
             <div class="nfc-icon"></div>
         </button>
         
-        <div class="card" id="card">
-            <div class="card-front">
-                <div class="card-chip"></div>
-                <div class="card-number">•••• •••• •••• 1234</div>
-                <div class="card-details">
-                    <div>
-                        <div class="card-holder">CARD HOLDER</div>
-                        <div class="card-holder-name">JOHN DOE</div>
-                    </div>
-                    <div>
-                        <div class="card-expiry">EXPIRES</div>
-                        <div class="card-expiry-date">12/25</div>
-                    </div>
+        <div class="visiting-card">
+            <!-- Company Logo (replace with your logo) -->
+            <div class="company-logo" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 50\"><text x=\"0\" y=\"35\" font-family=\"Arial\" font-size=\"36\" fill=\"%234a6fa5\">MyCompany</text></svg>')"></div>
+            
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-pic" id="profilePic">JD</div>
+                <div class="name-title">
+                    <div class="name" id="personName">John Doe</div>
+                    <div class="title" id="personTitle">Senior Developer</div>
                 </div>
-                <div class="card-issuer">VISA</div>
             </div>
             
-            <div class="card-back">
-                <div class="card-magnetic-strip"></div>
-                <div>
-                    <div class="card-cvv-label">SECURITY CODE</div>
-                    <div class="card-cvv">123</div>
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon phone-icon"></div>
+                    <div class="contact-text" id="phoneNumber">+1 (555) 123-4567</div>
                 </div>
-                <div class="card-issuer-back">VISA</div>
+                <div class="contact-item">
+                    <div class="contact-icon email-icon"></div>
+                    <div class="contact-text" id="emailAddress">john.doe@example.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon website-icon"></div>
+                    <div class="contact-text" id="websiteUrl">www.example.com/johndoe</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon address-icon"></div>
+                    <div class="contact-text" id="address">123 Business Ave, Suite 456<br>New York, NY 10001</div>
+                </div>
             </div>
-        </div>
-        
-        <button class="flip-button" id="flipButton">Flip Card</button>
-        
-        <div class="website-link" id="websiteLink">
-            https://example.com/card/1234
+            
+            <!-- Social Links -->
+            <div class="social-links">
+                <a href="https://linkedin.com" class="social-icon">in</a>
+                <a href="https://twitter.com" class="social-icon">X</a>
+                <a href="https://facebook.com" class="social-icon">f</a>
+                <a href="https://instagram.com" class="social-icon">ig</a>
+            </div>
+            
+            <!-- QR Code (would be generated dynamically in production) -->
+            <div class="qr-code">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='%23fff'/><path d='M20 20h10v10H20zM40 20h10v10H40zM20 40h10v10H20zM40 40h10v10H40zM60 20h10v10H60z' fill='%23000'/></svg>" alt="QR Code">
+            </div>
         </div>
     </div>
     
     <script>
-        document.getElementById('flipButton').addEventListener('click', function() {
-            document.getElementById('card').classList.toggle('flipped');
-        });
-        
-        // Website URL to share via NFC
-        const websiteUrl = "https://example.com/card/1234";
+        // Contact data that will be shared via NFC
+        const contactData = {
+            name: "John Doe",
+            title: "Senior Developer",
+            company: "MyCompany",
+            phone: "+15551234567",
+            email: "john.doe@example.com",
+            website: "https://www.example.com/johndoe",
+            address: "123 Business Ave, Suite 456, New York, NY 10001",
+            vcard: `BEGIN:VCARD
+VERSION:3.0
+N:Doe;John;;;
+FN:John Doe
+ORG:MyCompany;
+TITLE:Senior Developer
+TEL;TYPE=WORK,VOICE:+15551234567
+EMAIL;TYPE=PREF,INTERNET:john.doe@example.com
+URL:https://www.example.com/johndoe
+ADR;TYPE=WORK:;;123 Business Ave, Suite 456;New York;NY;10001;USA
+END:VCARD`
+        };
         
         document.getElementById('nfcButton').addEventListener('click', async function() {
             try {
@@ -247,28 +283,29 @@
                     // Web NFC API is available (Android Chrome)
                     const ndef = new NDEFReader();
                     
-                    // Write the website URL as an NFC tag
+                    // Write vCard data as an NFC tag
                     await ndef.write({
                         records: [{ 
-                            recordType: "url",
-                            data: websiteUrl
+                            recordType: "text/vcard",
+                            data: contactData.vcard
                         }]
                     });
                     
-                    alert('Website link shared via NFC successfully!\n' + websiteUrl);
+                    alert('Contact shared via NFC successfully!');
                 } 
                 else if (navigator.share) {
                     // Fallback to Web Share API if NFC isn't available
                     await navigator.share({
-                        title: 'My Digital Card',
-                        text: 'Check out my digital card',
-                        url: websiteUrl
+                        title: `${contactData.name} - ${contactData.title}`,
+                        text: `Contact: ${contactData.phone}\nEmail: ${contactData.email}`,
+                        url: contactData.website
                     });
                 }
                 else {
-                    // Final fallback - copy to clipboard and show alert
-                    await navigator.clipboard.writeText(websiteUrl);
-                    alert('Website link copied to clipboard!\n' + websiteUrl);
+                    // Final fallback - copy contact info to clipboard
+                    const contactText = `${contactData.name}\n${contactData.title}\n${contactData.company}\nPhone: ${contactData.phone}\nEmail: ${contactData.email}\nWebsite: ${contactData.website}\nAddress: ${contactData.address}`;
+                    await navigator.clipboard.writeText(contactText);
+                    alert('Contact info copied to clipboard!');
                 }
             } catch (error) {
                 console.error("Error sharing:", error);
@@ -277,19 +314,30 @@
                 if (error.name === 'NotAllowedError') {
                     alert('Please allow NFC permissions in your browser settings.');
                 } else {
-                    alert('Sharing failed. ' + error.message + '\n\nWebsite: ' + websiteUrl);
+                    alert('Sharing failed. ' + error.message);
                 }
             }
         });
         
-        // Make the website link clickable
-        document.getElementById('websiteLink').addEventListener('click', function() {
-            window.open(websiteUrl, '_blank');
+        // Make all contact items clickable
+        document.getElementById('phoneNumber').addEventListener('click', function() {
+            window.location.href = `tel:${contactData.phone.replace(/[^0-9+]/g, '')}`;
         });
         
-        // Style the website link as clickable
-        document.getElementById('websiteLink').style.cursor = 'pointer';
-        document.getElementById('websiteLink').style.textDecoration = 'underline';
+        document.getElementById('emailAddress').addEventListener('click', function() {
+            window.location.href = `mailto:${contactData.email}`;
+        });
+        
+        document.getElementById('websiteUrl').addEventListener('click', function() {
+            window.open(contactData.website, '_blank');
+        });
+        
+        // Style clickable elements
+        const clickableElements = document.querySelectorAll('#phoneNumber, #emailAddress, #websiteUrl');
+        clickableElements.forEach(el => {
+            el.style.cursor = 'pointer';
+            el.style.textDecoration = 'underline';
+        });
     </script>
 </body>
 </html>
