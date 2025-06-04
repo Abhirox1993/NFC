@@ -31,26 +31,28 @@ EMAIL:john.doe@example.com
 URL:https://example.com
 END:VCARD`;
 
-    // Create a blob and set href for download
     const blob = new Blob([vcardText], { type: 'text/vcard' });
+    const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
     const fileUrl = URL.createObjectURL(blob);
     document.getElementById('download').href = fileUrl;
 
     async function shareVCF() {
-      const file = new File([blob], "JohnDoe.vcf", { type: "text/vcard" });
+      if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
+        alert("❌ File sharing not supported in your browser.\n\nUse Chrome/Edge on Android with HTTPS.");
+        console.error("navigator.canShare not supported or doesn't allow file sharing.");
+        return;
+      }
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            title: 'vCard: John Doe',
-            text: 'Contact info for John Doe',
-            files: [file],
-          });
-        } catch (err) {
-          alert("Sharing failed: " + err);
-        }
-      } else {
-        alert("Your browser doesn't support file sharing (try Android + Chrome).");
+      try {
+        await navigator.share({
+          title: "John Doe vCard",
+          text: "Contact card",
+          files: [file],
+        });
+        console.log("✅ Shared successfully");
+      } catch (err) {
+        alert("❌ Sharing failed:\n" + err.message);
+        console.error("Sharing error:", err);
       }
     }
   </script>
