@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ATM Card UI</title>
+  <title>ATM Card with NFC</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: #f4f4f4;
+      background: #f0f2f5;
       font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
@@ -20,7 +20,7 @@
       position: relative;
       width: 90%;
       max-width: 400px;
-      aspect-ratio: 16/9;
+      aspect-ratio: 16 / 9;
       background: linear-gradient(135deg, #1B262C, #0F4C75);
       border-radius: 20px;
       box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -37,28 +37,35 @@
       color: #0F4C75;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+
+    .nfc-button:active {
+      transform: scale(0.95);
     }
 
     .card-content {
-      margin-top: 50px;
+      margin-top: 60px;
     }
 
     .card-title {
-      font-size: 1.5em;
+      font-size: 1.6em;
+      font-weight: bold;
       margin-bottom: 10px;
     }
 
     .card-detail {
       font-size: 1em;
-      opacity: 0.8;
+      opacity: 0.9;
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -70,8 +77,35 @@
       <div class="card-title">John Doe</div>
       <div class="card-detail">Digital Business Card</div>
       <div class="card-detail">john.doe@example.com</div>
+      <div class="card-detail">+1 555-123-4567</div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const nfcButton = document.querySelector(".nfc-button");
+
+      nfcButton.addEventListener("click", async () => {
+        if ("NDEFWriter" in window) {
+          try {
+            const writer = new NDEFWriter();
+            await writer.write({
+              records: [{
+                recordType: "url",
+                data: "https://yourwebsite.com/card" // Replace this with your actual link
+              }]
+            });
+            alert("NFC tag written successfully!");
+          } catch (error) {
+            console.error(error);
+            alert("Failed to write NFC tag: " + error.message);
+          }
+        } else {
+          alert("Web NFC is not supported on this device or browser.");
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
